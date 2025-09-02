@@ -1,7 +1,10 @@
 package com.firstclub.membership.controller;
 
-import com.firstclub.membership.dto.*;
-import com.firstclub.membership.service.MembershipService;
+import com.firstclub.membership.dto.request.CreatePlanRequest;
+import com.firstclub.membership.dto.request.UpdatePlanRequest;
+import com.firstclub.membership.dto.response.ApiResponse;
+import com.firstclub.membership.dto.response.PlanResponse;
+import com.firstclub.membership.service.MembershipPlanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +21,19 @@ import java.util.List;
 @Tag(name = "Membership Plans", description = "APIs for managing membership plans")
 public class MembershipPlanController {
     
-    private final MembershipService  membershipService;
+    private final MembershipPlanService membershipPlanService;
     
     @GetMapping
     @Operation(summary = "Get all active membership plans")
     public ResponseEntity<ApiResponse<List<PlanResponse>>> getAllPlans() {
-        List<PlanResponse> plans =  membershipService.getAllActivePlans();
+        List<PlanResponse> plans = membershipPlanService.getAllActivePlans();
         return ResponseEntity.ok(ApiResponse.success(plans));
     }
     
     @GetMapping("/{planId}")
     @Operation(summary = "Get plan details by ID")
     public ResponseEntity<ApiResponse<PlanResponse>> getPlanById(@PathVariable Long planId) {
-        PlanResponse plan =  membershipService.getPlanById(planId);
+        PlanResponse plan = membershipPlanService.getPlanById(planId);
         return ResponseEntity.ok(ApiResponse.success(plan));
     }
     
@@ -40,7 +43,7 @@ public class MembershipPlanController {
     public ResponseEntity<ApiResponse<PlanResponse>> createPlan(
             @Valid @RequestBody CreatePlanRequest request) {
         
-        PlanResponse plan =  membershipService.createPlan(request);
+        PlanResponse plan = membershipPlanService.createPlan(request);
         return ResponseEntity.ok(ApiResponse.success("Plan created successfully", plan));
     }
     
@@ -51,7 +54,7 @@ public class MembershipPlanController {
             @PathVariable Long planId,
             @Valid @RequestBody UpdatePlanRequest request) {
         
-        PlanResponse plan =  membershipService.updatePlan(planId, request);
+        PlanResponse plan = membershipPlanService.updatePlan(planId, request);
         return ResponseEntity.ok(ApiResponse.success("Plan updated successfully", plan));
     }
     
@@ -59,7 +62,7 @@ public class MembershipPlanController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Deactivate membership plan")
     public ResponseEntity<ApiResponse<Void>> deactivatePlan(@PathVariable Long planId) {
-         membershipService.deactivatePlan(planId);
+        membershipPlanService.deactivatePlan(planId);
         return ResponseEntity.ok(ApiResponse.success("Plan deactivated successfully"));
     }
 }

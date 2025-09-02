@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpgradeRequest {
+public class ModifyRequest {
     
     @NotNull(message = "New plan ID is required")
     private Long newPlanId;

@@ -1,6 +1,13 @@
 package com.firstclub.membership.controller;
 
-import com.firstclub.membership.dto.*;
+import com.firstclub.membership.dto.request.CreateBenefitRequest;
+import com.firstclub.membership.dto.request.CreateCriteriaRequest;
+import com.firstclub.membership.dto.request.CreateTierRequest;
+import com.firstclub.membership.dto.request.UpdateTierRequest;
+import com.firstclub.membership.dto.response.ApiResponse;
+import com.firstclub.membership.dto.response.BenefitResponse;
+import com.firstclub.membership.dto.response.CriteriaResponse;
+import com.firstclub.membership.dto.response.TierResponse;
 import com.firstclub.membership.service.MembershipTierService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,13 +41,6 @@ public class MembershipTierController {
         return ResponseEntity.ok(ApiResponse.success(tier));
     }
     
-    @GetMapping("/{tierId}/benefits")
-    @Operation(summary = "Get benefits for a specific tier")
-    public ResponseEntity<ApiResponse<List<BenefitResponse>>> getTierBenefits(@PathVariable Long tierId) {
-        List<BenefitResponse> benefits = tierService.getTierBenefits(tierId);
-        return ResponseEntity.ok(ApiResponse.success(benefits));
-    }
-    
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create a new membership tier")
@@ -60,6 +60,13 @@ public class MembershipTierController {
         
         TierResponse tier = tierService.updateTier(tierId, request);
         return ResponseEntity.ok(ApiResponse.success("Tier updated successfully", tier));
+    }
+        
+    @GetMapping("/{tierId}/benefits")
+    @Operation(summary = "Get benefits for a specific tier")
+    public ResponseEntity<ApiResponse<List<BenefitResponse>>> getTierBenefits(@PathVariable Long tierId) {
+        List<BenefitResponse> benefits = tierService.getTierBenefits(tierId);
+        return ResponseEntity.ok(ApiResponse.success(benefits));
     }
     
     @PostMapping("/{tierId}/benefits")
@@ -91,16 +98,4 @@ public class MembershipTierController {
         tierService.deactivateTier(tierId);
         return ResponseEntity.ok(ApiResponse.success("Tier deactivated successfully"));
     }
-}upgrade")
-    @Operation(summary = "Upgrade membership plan or tier")
-    public ResponseEntity<ApiResponse<MembershipResponse>> upgrade(
-            @PathVariable @NotNull Long userId,
-            @Valid @RequestBody UpgradeRequest request) {
-        
-        MembershipResponse response = membershipService.upgradeMembership(
-            userId, request.getNewPlanId(), request.getNewTierId()
-        );
-        return ResponseEntity.ok(ApiResponse.success("Upgrade successful", response));
-    }
-    
-    @PutMapping("/users/{userId}/
+}

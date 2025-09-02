@@ -1,7 +1,11 @@
 package com.firstclub.membership.service;
 
 import com.firstclub.membership.dto.request.SubscriptionRequest;
+import com.firstclub.membership.dto.response.BenefitResponse;
 import com.firstclub.membership.dto.response.MembershipResponse;
+import com.firstclub.membership.dto.response.TransactionResponse;
+
+import java.util.List;
 
 /**
  * Service interface for managing membership operations including subscriptions,
@@ -64,6 +68,27 @@ public interface MembershipService {
     MembershipResponse upgradeMembership(Long userId, Long newPlanId, Long newTierId);
 
     /**
+     * Downgrades a user's existing membership to a lower tier and/or plan.
+     * 
+     * This method handles membership downgrades with the following features:
+     * - Validation that the new tier is lower than the current tier
+     * - Prorated refund calculation for the downgrade
+     * - Transaction recording with old and new plan/tier information
+     * - Membership update with new plan, tier, and adjusted end date
+     * - Event publishing for membership downgrade
+     * 
+     * @param userId The ID of the user whose membership is being downgraded
+     * @param newPlanId The ID of the new plan to downgrade to
+     * @param newTierId The ID of the new tier to downgrade to
+     * @return MembershipResponse containing the updated membership details
+     * @throws MembershipNotFoundException if no active membership is found for the user
+     * @throws PlanNotFoundException if the new plan doesn't exist
+     * @throws TierNotFoundException if the new tier doesn't exist
+     * @throws InvalidOperationException if attempting to downgrade to a higher or same tier
+     */
+    MembershipResponse downgradeMembership(Long userId, Long newPlanId, Long newTierId);
+
+    /**
      * Cancels a user's active membership.
      * 
      * This method handles membership cancellation by:
@@ -113,4 +138,24 @@ public interface MembershipService {
      * @param userId The ID of the user whose tier is being evaluated
      */
     void evaluateAndUpdateTier(Long userId);
+
+    /**
+     * Retrieves the benefits available to a user based on their current membership.
+     * 
+     * @param userId The ID of the user
+     * @return List of benefits available to the user
+     * @throws MembershipNotFoundException if no active membership is found for the user
+     */
+    List<BenefitResponse> getUserBenefits(Long userId);
+
+    /**
+     * Retrieves the transaction history for a user's membership.
+     * 
+     * @param userId The ID of the user
+     * @param page The page number (0-based)
+     * @param size The page size
+     * @return List of transactions for the user
+     * @throws MembershipNotFoundException if no membership is found for the user
+     */
+    List<TransactionResponse> getTransactionHistory(Long userId, int page, int size);
 }

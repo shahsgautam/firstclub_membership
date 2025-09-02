@@ -22,6 +22,7 @@ public class SubscriptionRequest {
     @NotNull(message = "Tier ID is required")
     private Long tierId;
     
+    @Builder.Default
     private Boolean autoRenew = true;
     
     private String paymentMethodId;

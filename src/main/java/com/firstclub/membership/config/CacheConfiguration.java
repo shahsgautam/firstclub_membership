@@ -14,21 +14,21 @@ import java.time.Duration;
 
 @Configuration
 public class CacheConfiguration {
-    
+
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(Duration.ofMinutes(60))
-            .serializeValuesWith(RedisSerializationContext.SerializationPair
-                .fromSerializer(new GenericJackson2JsonRedisSerializer()))
-            .disableCachingNullValues();
-        
+                .entryTtl(Duration.ofMinutes(60))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair
+                        .fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                .disableCachingNullValues();
+
         return RedisCacheManager.builder(connectionFactory)
-            .cacheDefaults(config)
-            .transactionAware()
-            .build();
+                .cacheDefaults(config)
+                .transactionAware()
+                .build();
     }
-    
+
     @Bean
     public CacheManager localCacheManager() {
         return new ConcurrentMapCacheManager("membership", "plans", "tiers");

@@ -30,6 +30,11 @@ spring:
           batch_size: 20
         order_inserts: true
         order_updates: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
         
   redis:
     host: localhost
@@ -45,6 +50,13 @@ spring:
     type: redis
     redis:
       time-to-live: 3600000
+
+# Custom application properties
+app:
+  data:
+    initialization:
+      enabled: true  # Set to false to disable data initialization
+      force: false   # Set to true to force initialization even if data exists
       
 logging:
   level:

@@ -1,6 +1,11 @@
 package com.firstclub.membership.controller;
 
-import com.firstclub.membership.dto.*;
+import com.firstclub.membership.dto.request.SubscriptionRequest;
+import com.firstclub.membership.dto.request.ModifyRequest;
+import com.firstclub.membership.dto.response.ApiResponse;
+import com.firstclub.membership.dto.response.BenefitResponse;
+import com.firstclub.membership.dto.response.MembershipResponse;
+import com.firstclub.membership.dto.response.TransactionResponse;
 import com.firstclub.membership.service.MembershipService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,11 +38,23 @@ public class MembershipController {
             .body(ApiResponse.success("Subscription successful", response));
     }
     
+    @PutMapping("/users/{userId}/upgrade")
+    @Operation(summary = "Upgrade membership plan or tier")
+    public ResponseEntity<ApiResponse<MembershipResponse>> upgrade(
+            @PathVariable @NotNull Long userId,
+            @Valid @RequestBody ModifyRequest request) {
+        
+        MembershipResponse response = membershipService.upgradeMembership(
+            userId, request.getNewPlanId(), request.getNewTierId()
+        );
+        return ResponseEntity.ok(ApiResponse.success("Upgrade successful", response));
+    }
+    
     @PutMapping("/users/{userId}/downgrade")
     @Operation(summary = "Downgrade membership tier")
     public ResponseEntity<ApiResponse<MembershipResponse>> downgrade(
             @PathVariable @NotNull Long userId,
-            @Valid @RequestBody DowngradeRequest request) {
+            @Valid @RequestBody ModifyRequest request) {
         
         MembershipResponse response = membershipService.downgradeMembership(
             userId, request.getNewPlanId(), request.getNewTierId()
