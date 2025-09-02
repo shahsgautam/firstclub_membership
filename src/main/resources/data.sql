@@ -32,17 +32,17 @@ INSERT INTO tier_benefits (tier_id, type, value, description, active) VALUES
 ((SELECT id FROM membership_tiers WHERE name = 'Platinum'), 'FASTER_DELIVERY', NULL, 'Express delivery on all orders', true);
 
 -- Insert Tier Criteria
-INSERT INTO tier_criteria (tier_id, type, threshold, evaluation_period_days, description, active) VALUES
+INSERT INTO tier_criteria (tier_id, type, threshold, evaluation_period_days, cohort_name, active) VALUES
 -- Silver Tier Criteria
-((SELECT id FROM membership_tiers WHERE name = 'Silver'), 'MIN_ORDER_COUNT', 10, 90, 'Minimum 10 orders in 90 days', true),
-((SELECT id FROM membership_tiers WHERE name = 'Silver'), 'MIN_ORDER_VALUE', 500.00, 90, 'Minimum $500 total spending in 90 days', true),
+((SELECT id FROM membership_tiers WHERE name = 'Silver'), 'MIN_ORDER_COUNT', 10, 90, NULL, true),
+((SELECT id FROM membership_tiers WHERE name = 'Silver'), 'MIN_ORDER_VALUE', 500.00, 90, NULL, true),
 
 -- Gold Tier Criteria
-((SELECT id FROM membership_tiers WHERE name = 'Gold'), 'CUMULATIVE_SPENDING', 2000.00, NULL, 'Lifetime spending over $2,000', true),
-((SELECT id FROM membership_tiers WHERE name = 'Gold'), 'MEMBERSHIP_DURATION', 365, NULL, 'Member for at least 1 year', true),
+((SELECT id FROM membership_tiers WHERE name = 'Gold'), 'CUMULATIVE_SPENDING', 2000.00, NULL, NULL, true),
+((SELECT id FROM membership_tiers WHERE name = 'Gold'), 'MEMBERSHIP_DURATION', 365, NULL, NULL, true),
 
 -- Platinum Tier Criteria
-((SELECT id FROM membership_tiers WHERE name = 'Platinum'), 'USER_COHORT', NULL, NULL, 'Part of VIP customer cohort', true);
+((SELECT id FROM membership_tiers WHERE name = 'Platinum'), 'USER_COHORT', NULL, NULL, 'VIP', true);
 
 -- Insert Sample User Memberships
 INSERT INTO user_memberships (user_id, plan_id, tier_id, status, start_date, end_date, auto_renew, created_at, updated_at, version) VALUES
